@@ -1,7 +1,10 @@
 package fr.limayrac.ppe.henrybouetard.frediapp;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -29,6 +35,10 @@ public class LoginActivity extends AppCompatActivity {
     EditText userPasswd;
 
     private ProgressDialog progress;
+
+    // JSON Node names
+    private static final String TAG_LOGIN_STATUS = "status";
+    private static final String TAG_LOGIN_MESSAGE = "message";
 
     public void loginButtonPressed(View v) {
         String mail = userMail.getText().toString();
@@ -63,8 +73,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 final TextView outputView = (TextView)findViewById(R.id.textView);
 
-                // URL myUrl = new URL("williamhenry.ddns.net/frediApp/actions/login.php");
-                URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/login.php");
+                URL myUrl = new URL("http://192.168.1.29/frediApp/actions/login.php");
+                //URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/login.php");
 
 
                 HttpURLConnection con = (HttpURLConnection)myUrl.openConnection();
@@ -96,15 +106,53 @@ public class LoginActivity extends AppCompatActivity {
                 }
                 br.close();
 
-                output.append("Response: " + System.getProperty("line.separator") + responseOutput.toString());
+                JSONObject returnedJSON = parseLoginJSON(responseOutput.toString());
+
+                String status = null;
+                String message = null;
+
+                try {
+                    status = returnedJSON.getString(TAG_LOGIN_STATUS);
+                    message = returnedJSON.getString(TAG_LOGIN_MESSAGE);
+                } catch (JSONException e) {
+                    e.getMessage();
+                }
+
+                final String finalStatus = status;
+                final String finalMessage = message;
 
                 LoginActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
-                        outputView.setText(output);
-                        System.out.println(output);
                         progress.dismiss();
+
+                        if (finalStatus == "success") {
+                            Intent addNdf = new Intent(LoginActivity.this, AddNdfActivity.class);
+                            startActivity(addNdf);
+                        } else {
+                            // Popup alert to show decrypted message
+                            // Instantiate an AlertDialog.Builder with its constructor
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+
+                            // Chain together various setter methods to set the dialog characteristics
+                            builder.setMessage(finalMessage)
+                                    .setTitle(finalStatus);
+
+                            // Adding buttons
+                            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            // Get the AlertDialog from create()
+                            AlertDialog dialog = builder.create();
+
+                            // Show the aAlertDialog
+                            dialog.show();
+                        }
                     }
                 });
 
@@ -121,6 +169,24 @@ public class LoginActivity extends AppCompatActivity {
 
         protected void onPostRequestExecute() {
             progress.dismiss();
+        }
+
+        private JSONObject parseLoginJSON(String json) {
+
+            JSONObject jsonObj = null;
+
+            if (json != null) {
+                try {
+                    jsonObj = new JSONObject(json);
+                } catch (JSONException exc) {
+                    exc.getMessage();
+                    return null;
+                }
+            } else {
+                return null;
+            }
+
+            return jsonObj;
         }
     }
 
