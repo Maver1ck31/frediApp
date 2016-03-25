@@ -129,12 +129,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Valider"
+        android:text="Add"
         android:id="@+id/valid"
         android:layout_marginLeft="135dp"
         android:layout_marginRight="100dp"
         android:layout_gravity="center"
         android:layout_below="@+id/list_ligue"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="addButtonPressed" />
 
 </RelativeLayout>

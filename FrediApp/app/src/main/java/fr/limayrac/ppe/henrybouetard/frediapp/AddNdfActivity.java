@@ -2,6 +2,7 @@ package fr.limayrac.ppe.henrybouetard.frediapp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +32,11 @@ public class AddNdfActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    public void addButtonPressed(View v) {
+        Intent gestionNdf = new Intent(this, GestionNdfActivity.class);
+        startActivity(gestionNdf);
+    }
+
     private class PostRequest extends AsyncTask<String, Void, Void> {
 
         private final Context context;
@@ -50,7 +56,7 @@ public class AddNdfActivity extends AppCompatActivity {
 
             try {
 
-                final TextView outputView = (TextView) findViewById(R.id.txtOutput);
+                //final TextView outputView = (TextView) findViewById(R.id.txtOutput);
 
                 // URL myUrl = new URL("williamhenry.ddns.net/frediApp/actions/login.php");
                 URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/retrieveLigue.php");
@@ -91,7 +97,7 @@ public class AddNdfActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
-                        outputView.setText(output);
+                        //outputView.setText(output);
                         System.out.println(output);
                         progress.dismiss();
                     }

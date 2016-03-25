@@ -1,5 +1,6 @@
 package fr.limayrac.ppe.henrybouetard.frediapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +17,11 @@ public class GestionNdfActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+    }
+
+    public void addButtonPressed(View v) {
+        Intent addNdf = new Intent(this, AddNdfActivity.class);
+        startActivity(addNdf);
     }
 
 }

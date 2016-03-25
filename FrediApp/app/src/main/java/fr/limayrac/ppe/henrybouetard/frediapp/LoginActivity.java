@@ -131,8 +131,8 @@ public class LoginActivity extends AppCompatActivity {
                         progress.dismiss();
 
                         if (finalStatus.contains("success")) {
-                            Intent addNdf = new Intent(LoginActivity.this, AddNdfActivity.class);
-                            startActivity(addNdf);
+                            Intent gestionNdf = new Intent(LoginActivity.this, GestionNdfActivity.class);
+                            startActivity(gestionNdf);
                         } else {
                             // Popup alert to show decrypted message
                             // Instantiate an AlertDialog.Builder with its constructor
