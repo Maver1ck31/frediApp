@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Fredi Mobile App</string>
+    <string name="action_settings">Settings</string>
+    <string name="loginTitle">Login</string>
+    <string name="lblName">Email</string>
+    <string name="lblPassword">Password</string>
+    <string name="btnLogin">Login</string>
+    <string name="btnRegister">Register</string>
+    <string name="lblMailHint">Enter your email address</string>
+    <string name="lblPasswordHint">Enter your password</string>
+    <string name="title_activity_ndf_">Ndf_Activity</string>
+</resources>
