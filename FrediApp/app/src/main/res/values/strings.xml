@@ -10,4 +10,16 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_add_ndf">AddNdfActivity</string>
     <string name="btnRegisterText">Register</string>
+    <string name="lblTitleTextRegister">Register</string>
+    <string name="nh">Name</string>
+    <string name="ph">Firstname</string>
+    <string name="rh">Street</string>
+    <string name="cph">Post code</string>
+    <string name="vh">Town</string>
+    <string name="am1h">Email</string>
+    <string name="am2h">Email confirmation</string>
+    <string name="passh">Password</string>
+    <string name="pass2h">Password confirmation</string>
+    <string name="su">Register</string>
+    <string name="title_activity_gestion_ndf">GestionNdfActivity</string>
 </resources>
