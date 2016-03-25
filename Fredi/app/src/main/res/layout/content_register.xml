@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:showIn="@layout/activity_register" tools:context=".register">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:text="@string/a"
+        android:id="@+id/textView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="36sp"
+        android:textColor="#2f4f4f" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userNom"
+        android:layout_alignParentStart="true"
+        android:hint="@string/nh"
+        android:layout_below="@+id/textView"
+        android:nextFocusDown="@+id/userPrenom"   />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userPrenom"
+        android:layout_below="@+id/userNom"
+        android:hint="@string/ph"
+        android:nextFocusDown="@+id/userRue"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userRue"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/userPrenom"
+        android:hint="@string/rh"
+        android:nextFocusDown="@+id/userCP"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userCP"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/textView"
+        android:layout_below="@+id/userRue"
+        android:hint="@string/cph"
+        android:nextFocusDown="@+id/userVille"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userVille"
+        android:layout_alignTop="@+id/userCP"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/userCP"
+        android:hint="@string/vh"
+        android:nextFocusDown="@+id/userMail"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userMail"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/userCP"
+        android:hint="@string/am1h"
+        android:nextFocusDown="@+id/userMail2"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userMail2"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/userMail"
+        android:hint="@string/am2h"
+        android:nextFocusDown="@+id/userPass"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userPass"
+        android:layout_below="@+id/userMail2"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/passh"
+        android:password="true"
+        android:nextFocusDown="@+id/userPass2"  />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:inputType="text"
+        android:layout_height="wrap_content"
+        android:id="@+id/userPass2"
+        android:layout_below="@+id/userPass"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/pass2h"
+        android:password="true"
+        android:nextFocusDown="@+id/btnSignUp"  />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/su"
+        android:id="@+id/btnSignUp"
+        android:layout_below="@+id/userPass2"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="47dp"
+        android:nestedScrollingEnabled="false"
+        android:onClick="registerButtonPressed" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/userOUT"
+        android:layout_below="@+id/userPass2"
+        android:layout_alignParentStart="true" />
+
+</RelativeLayout>

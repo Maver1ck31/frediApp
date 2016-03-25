@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Fredi</string>
+    <string name="action_settings">Settings</string>
+    <string name="a">Sign up</string>
+    <string name="nh">Nom</string>
+    <string name="ph">Prénom</string>
+    <string name="rh">Rue</string>
+    <string name="cph">CP</string>
+    <string name="vh">Ville</string>
+    <string name="am1h">Adresse mail</string>
+    <string name="am2h">Confirmer</string>
+    <string name="passh">mot de passe</string>
+    <string name="pass2h">Confirmer</string>
+    <string name="su">Sign up</string>
+</resources>
