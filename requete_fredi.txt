@@ -1,6 +1,11 @@
 Requete pour affichage infos dans la ListView : 
 
-SELECT idLigne, trajet
+SELECT idLigne, idMotif
 FROM lignefrais;
 
 
+Requete pour affichage complet : 
+
+SELECT*
+FROM lignefrais
+WHERE idLigne = Listview.setSelection;
