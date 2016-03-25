@@ -47,6 +47,11 @@ public class LoginActivity extends AppCompatActivity {
         new PostRequest(this, mail, passwd).execute();
     }
 
+    public void registerButtonPressed(View v) {
+        Intent registerActivity = new Intent(this, AddNdfActivity.class);
+        startActivity(registerActivity);
+    }
+
 
     private class PostRequest extends AsyncTask<String, Void, Void> {
 
@@ -71,10 +76,8 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                final TextView outputView = (TextView)findViewById(R.id.textView);
-
-                URL myUrl = new URL("http://192.168.1.29/frediApp/actions/login.php");
-                //URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/login.php");
+                //URL myUrl = new URL("http://192.168.1.29/frediApp/actions/login.php");
+                URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/login.php");
 
 
                 HttpURLConnection con = (HttpURLConnection)myUrl.openConnection();
@@ -127,7 +130,7 @@ public class LoginActivity extends AppCompatActivity {
                     public void run() {
                         progress.dismiss();
 
-                        if (finalStatus == "success") {
+                        if (finalStatus.contains("success")) {
                             Intent addNdf = new Intent(LoginActivity.this, AddNdfActivity.class);
                             startActivity(addNdf);
                         } else {
