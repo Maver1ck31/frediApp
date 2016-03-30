@@ -12,6 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -91,8 +94,6 @@ public class AddNdfActivity extends AppCompatActivity {
                 }
                 br.close();
 
-                output.append("Response: " + System.getProperty("line.separator") + responseOutput.toString());
-
                 AddNdfActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
@@ -109,6 +110,25 @@ public class AddNdfActivity extends AppCompatActivity {
             } catch (IOException e) {
                 // TODO Generate Exception
                 e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        private String[] parseLoginJSON(String json) {
+
+            JSONObject jsonObj = null;
+            String[] returnValue = null;
+
+            if (json != null) {
+                try {
+                    jsonObj = new JSONObject(json);
+                } catch (JSONException exc) {
+                    exc.getMessage();
+                    return null;
+                }
+            } else {
+                return null;
             }
 
             return null;

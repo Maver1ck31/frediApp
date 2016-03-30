@@ -5,18 +5,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,9 +35,16 @@ public class LoginActivity extends AppCompatActivity {
 
     private ProgressDialog progress;
 
+    private SharedPreferences preferencesSettings;
+    private SharedPreferences.Editor preferencesEditor;
+
+    private static final int PREFERENCES_MODE_PRIVATE = 0;
+    public static final String PREFS_NAME = "MyPrefsFile";
+
     // JSON Node names
     private static final String TAG_LOGIN_STATUS = "status";
     private static final String TAG_LOGIN_MESSAGE = "message";
+    private static final String TAG_LOGIN_USER_INFOS = "infos";
 
     public void loginButtonPressed(View v) {
         String mail = userMail.getText().toString();
@@ -92,11 +98,11 @@ public class LoginActivity extends AppCompatActivity {
                 dStream.flush();
                 dStream.close();
 
-                int responseCode = con.getResponseCode();
-
-                System.out.println("\nSending 'POST' request to URL : " + myUrl);
-                System.out.println("Post parameters : " + urlParameters);
-                System.out.println("Response Code : " + responseCode);
+//                int responseCode = con.getResponseCode();
+//
+//                System.out.println("\nSending 'POST' request to URL : " + myUrl);
+//                System.out.println("Post parameters : " + urlParameters);
+//                System.out.println("Response Code : " + responseCode);
 
                 final StringBuilder output = new StringBuilder();
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -113,16 +119,19 @@ public class LoginActivity extends AppCompatActivity {
 
                 String status = null;
                 String message = null;
+                int id = 999999;
 
                 try {
                     status = returnedJSON.getString(TAG_LOGIN_STATUS);
                     message = returnedJSON.getString(TAG_LOGIN_MESSAGE);
+                    id = returnedJSON.getInt(TAG_LOGIN_USER_INFOS);
                 } catch (JSONException e) {
                     e.getMessage();
                 }
 
                 final String finalStatus = status;
                 final String finalMessage = message;
+                final int finalId = id;
 
                 LoginActivity.this.runOnUiThread(new Runnable() {
 
@@ -133,6 +142,13 @@ public class LoginActivity extends AppCompatActivity {
                         if (finalStatus.contains("success")) {
                             Intent gestionNdf = new Intent(LoginActivity.this, GestionNdfActivity.class);
                             startActivity(gestionNdf);
+
+                            preferencesSettings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+                            preferencesEditor = preferencesSettings.edit();
+
+                            preferencesEditor.putInt("idDem", finalId);
+                            preferencesEditor.commit();
+
                         } else {
                             // Popup alert to show decrypted message
                             // Instantiate an AlertDialog.Builder with its constructor

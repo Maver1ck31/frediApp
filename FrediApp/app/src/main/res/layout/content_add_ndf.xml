@@ -119,7 +119,7 @@
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/list_ligue"
+        android:id="@+id/listLigues"
         android:spinnerMode="dropdown"
         android:layout_gravity="center"
         android:layout_below="@+id/inputCttotal"
@@ -134,7 +134,7 @@
         android:layout_marginLeft="135dp"
         android:layout_marginRight="100dp"
         android:layout_gravity="center"
-        android:layout_below="@+id/list_ligue"
+        android:layout_below="@+id/listLigues"
         android:layout_centerHorizontal="true"
         android:onClick="addButtonPressed" />
 

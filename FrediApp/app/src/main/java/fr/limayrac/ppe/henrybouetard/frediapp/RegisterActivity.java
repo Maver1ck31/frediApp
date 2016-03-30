@@ -1,32 +1,22 @@
 package fr.limayrac.ppe.henrybouetard.frediapp;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -34,7 +24,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Handler;
 
     public class RegisterActivity extends AppCompatActivity {
     // Link Graphical objects from the UI
@@ -47,7 +36,6 @@ import java.util.logging.Handler;
     EditText tuserRue;
     EditText tuserCP;
     EditText tuserVille;
-    TextView tuserOUT;
 
     private ProgressDialog progress;
 
@@ -103,7 +91,6 @@ import java.util.logging.Handler;
         @Override
         protected Void doInBackground(String... params) {
             try {
-                final TextView outputView = (TextView)findViewById(R.id.tuserOUT);
 
                 URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/register.php");
                 //URL myUrl = new URL("http://williamhenry.ddns.net/emsservices/actionsdao/userLoginDao.php");
@@ -120,11 +107,11 @@ import java.util.logging.Handler;
                 dStream.flush();
                 dStream.close();
 
-                int responseCode = con.getResponseCode();
-
-                System.out.println("\nSending 'POST' request to URL : " + myUrl);
-                System.out.println("Post parameters : " + urlParameters);
-                System.out.println("Response Code : " + responseCode);
+//                int responseCode = con.getResponseCode();
+//
+//                System.out.println("\nSending 'POST' request to URL : " + myUrl);
+//                System.out.println("Post parameters : " + urlParameters);
+//                System.out.println("Response Code : " + responseCode);
 
                 // TODO parse JSON
                 final StringBuilder output = new StringBuilder();
@@ -153,30 +140,60 @@ import java.util.logging.Handler;
                 final String finalStatus = status;
                 final String finalMessage = message;
 
-                // register.this.runOnUiThread(new Runnable() {
-
-                //  @Override
-                //  public void run() {
-                //
-                //AlertDialog.Builder builder = new AlertDialog.Builder(register.this);
-
                 RegisterActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         progress.dismiss();
                         if(finalStatus.contains("success"))
                         {
-                            tuserOUT.setTextColor(Color.parseColor("#00CC00"));
-                            tuserOUT.setText(finalStatus + " : " + finalMessage);
-                            // TOTO intent Login
-                            Intent loginView = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(loginView);
+                            // Popup alert to show decrypted message
+                            // Instantiate an AlertDialog.Builder with its constructor
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+
+                            // Chain together various setter methods to set the dialog characteristics
+                            builder.setMessage(finalMessage)
+                                    .setTitle(finalStatus);
+
+                            // Adding buttons
+                            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    // TODO intent Login
+                                    Intent loginView = new Intent(RegisterActivity.this, LoginActivity.class);
+                                    startActivity(loginView);
+                                }
+                            });
+
+                            // Get the AlertDialog from create()
+                            AlertDialog dialog = builder.create();
+
+                            // Show the aAlertDialog
+                            dialog.show();
                         }
                         else {
-                            tuserOUT.setText(finalStatus + " : " + finalMessage);
-                            tuserOUT.setTextColor(Color.parseColor("#CC0000"));
+                            // Popup alert to show decrypted message
+                            // Instantiate an AlertDialog.Builder with its constructor
+                            AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+
+                            // Chain together various setter methods to set the dialog characteristics
+                            builder.setMessage(finalMessage)
+                                    .setTitle(finalStatus);
+
+                            // Adding buttons
+                            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+
+                            // Get the AlertDialog from create()
+                            AlertDialog dialog = builder.create();
+
+                            // Show the aAlertDialog
+                            dialog.show();
                         }
-                        System.out.println(finalStatus + " " + finalMessage);
                     }
                 });
             } catch (MalformedURLException e) {
@@ -231,7 +248,6 @@ import java.util.logging.Handler;
         tuserPrenom = (EditText)findViewById(R.id.userPrenom);
         tuserVille = (EditText)findViewById(R.id.userVille);
         tuserRue = (EditText)findViewById(R.id.userRue);
-        tuserOUT = (TextView)findViewById(R.id.tuserOUT);
     }
 
     @Override

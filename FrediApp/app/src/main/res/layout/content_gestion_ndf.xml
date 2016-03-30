@@ -10,33 +10,24 @@
     tools:showIn="@layout/activity_gestion_ndf"
     tools:context="fr.limayrac.ppe.henrybouetard.frediapp.GestionNdfActivity">
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
-        android:id="@+id/textView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
+        android:id="@+id/listNdf"
+        android:headerDividersEnabled="false"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:minHeight="50dp" />
+        android:layout_marginBottom="93dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
-        android:id="@+id/btnAdd"
-        android:onClick="addButtonPressed"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
-
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listView_Gestion_Ndf"
-        android:headerDividersEnabled="false"
-        android:layout_below="@+id/btnAdd"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:text="Ajouter une note de frais"
+        android:id="@+id/addNdf"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="43dp"
+        android:onClick="addButtonPressed" />
 
 </RelativeLayout>
