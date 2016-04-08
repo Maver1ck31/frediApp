@@ -34,6 +34,11 @@
             android:label="@string/title_activity_gestion_ndf"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".AddNdfDateActivity"
+            android:label="@string/title_activity_add_ndf_date"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

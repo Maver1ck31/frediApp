@@ -8,14 +8,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.DatePicker;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,49 +25,66 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
-public class LoginActivity extends AppCompatActivity {
-
-    // Link Graphical objects from the UI
-    EditText userMail;
-    EditText userPasswd;
+public class AddNdfDateActivity extends AppCompatActivity {
 
     private ProgressDialog progress;
-
     private SharedPreferences preferencesSettings;
-    private SharedPreferences.Editor preferencesEditor;
-
-    private static final int PREFERENCES_MODE_PRIVATE = 0;
     public static final String PREFS_NAME = "MyPrefsFile";
 
     // JSON Node names
     private static final String TAG_LOGIN_STATUS = "status";
     private static final String TAG_LOGIN_MESSAGE = "message";
-    private static final String TAG_LOGIN_USER_INFOS = "infos";
 
-    public void loginButtonPressed(View v) {
-        String mail = userMail.getText().toString();
-        String passwd = userPasswd.getText().toString();
+    // Link UI elements
+    DatePicker dateNdf;
 
-        new PostRequest(this, mail, passwd).execute();
+    String trajet;
+    int distance;
+    int idMotif;
+    int idDem;
+    int annee;
+    float coutP;
+    float coutH;
+    float coutR;
+    String date;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_add_ndf_date);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        dateNdf = (DatePicker) findViewById(R.id.datePicker);
+        annee = dateNdf.getYear();
+        date = annee + "-" + dateNdf.getMonth() + "-" + dateNdf.getDayOfMonth();
+
+        preferencesSettings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        trajet = preferencesSettings.getString("trajetNdf", "Error");
+        distance = preferencesSettings.getInt("distanceNdf", 0);
+        coutP = preferencesSettings.getFloat("coutPNdf", 0);
+        coutH = preferencesSettings.getFloat("coutHNdf", 0);
+        coutR = preferencesSettings.getFloat("coutRNdf", 0);
+        idMotif = preferencesSettings.getInt("idMotif", 0);
+        idDem = preferencesSettings.getInt("idDem", 0);
+
+        System.out.println("tra: " + trajet + "\tdist: " + distance + "\tidMotif: " + idMotif
+                + "\tidDem: " + idDem + "\ncoutP: " + coutP + "\ncoutH: " + coutH + "\ncoutR: " + coutR);
     }
 
-    public void registerButtonPressed(View v) {
-        Intent registerActivity = new Intent(this, RegisterActivity.class);
-        startActivity(registerActivity);
+    public void btnAddPressed(View v) {
+        date = dateNdf.getYear() + "-" + dateNdf.getMonth() + "-" + dateNdf.getDayOfMonth();
+        new PostRequestAdd(this).execute();
     }
 
-
-    private class PostRequest extends AsyncTask<String, Void, Void> {
+    private class PostRequestAdd extends AsyncTask<String, Void, Void> {
 
         private final Context context;
-        private final String mail;
-        private final String passwd;
 
-        public PostRequest(Context c, String mail, String passwd) {
+        public PostRequestAdd(Context c) {
             this.context = c;
-            this.mail = mail;
-            this.passwd = passwd;
         }
 
         protected void onPreExecute() {
@@ -82,12 +98,16 @@ public class LoginActivity extends AppCompatActivity {
 
             try {
 
-                //URL myUrl = new URL("http://192.168.1.29/frediApp/actions/login.php");
-                URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/login.php");
+                //final TextView outputView = (TextView) findViewById(R.id.txtOutput);
+
+                // URL myUrl = new URL("williamhenry.ddns.net/frediApp/actions/login.php");
+                URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/insertNdf.php");
 
 
-                HttpURLConnection con = (HttpURLConnection)myUrl.openConnection();
-                String urlParameters = "AdresseMail=" + mail + "&motDePasse=" + passwd;
+                final HttpURLConnection con = (HttpURLConnection) myUrl.openConnection();
+                String urlParameters = "date=" + date + "&trajet=" + trajet +"&km=" + distance
+                        + "&coutPeage=" + coutP + "&coutRepas=" + coutR + "&coutHebergement=" + coutH
+                        + "&idDemandeur=" + idDem + "&idMotif=" + idMotif + "&annee=" + annee;
                 con.setRequestMethod("POST");
                 con.setRequestProperty("USER-AGENT", "Mozilla/5.0");
                 con.setRequestProperty("ACCEPT-LANGUAGE", "en-US,en;0.5");
@@ -104,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                 String line = "";
                 StringBuilder responseOutput = new StringBuilder();
 
-                while((line = br.readLine()) != null ) {
+                while ((line = br.readLine()) != null) {
                     responseOutput.append(line);
                 }
                 br.close();
@@ -113,42 +133,49 @@ public class LoginActivity extends AppCompatActivity {
 
                 String status = null;
                 String message = null;
-                int id = 888888;
 
                 try {
                     status = returnedJSON.getString(TAG_LOGIN_STATUS);
                     message = returnedJSON.getString(TAG_LOGIN_MESSAGE);
-                    id = returnedJSON.getInt(TAG_LOGIN_USER_INFOS);
                 } catch (JSONException e) {
                     e.getMessage();
                 }
 
                 final String finalStatus = status;
                 final String finalMessage = message;
-                final int finalId = id;
 
-                LoginActivity.this.runOnUiThread(new Runnable() {
+                AddNdfDateActivity.this.runOnUiThread(new Runnable() {
 
                     @Override
                     public void run() {
                         progress.dismiss();
-
                         if (finalStatus.contains("success")) {
-                            Intent gestionNdf = new Intent(LoginActivity.this, GestionNdfActivity.class);
-                            startActivity(gestionNdf);
+                            // Instantiate an AlertDialog.Builder with its constructor
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-                            System.out.println("finalId: " + finalId);
+                            // Chain together various setter methods to set the dialog characteristics
+                            builder.setMessage(finalMessage)
+                                    .setTitle(finalStatus);
 
-                            preferencesSettings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-                            preferencesEditor = preferencesSettings.edit();
+                            // Adding buttons
+                            builder.setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                    Intent gestNdf = new Intent(context, GestionNdfActivity.class);
+                                    startActivity(gestNdf);
+                                }
+                            });
 
-                            preferencesEditor.putInt("idDem", finalId);
-                            preferencesEditor.commit();
+                            // Get the AlertDialog from create()
+                            AlertDialog dialog = builder.create();
+
+                            // Show the aAlertDialog
+                            dialog.show();
 
                         } else {
-                            // Popup alert to show decrypted message
                             // Instantiate an AlertDialog.Builder with its constructor
-                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
                             // Chain together various setter methods to set the dialog characteristics
                             builder.setMessage(finalMessage)
@@ -182,10 +209,6 @@ public class LoginActivity extends AppCompatActivity {
             return null;
         }
 
-        protected void onPostRequestExecute() {
-            progress.dismiss();
-        }
-
         private JSONObject parseLoginJSON(String json) {
 
             JSONObject jsonObj = null;
@@ -205,37 +228,4 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Initialising object by using their id's
-        userMail = (EditText)findViewById(R.id.txtMail);
-        userPasswd = (EditText)findViewById(R.id.txtPassword);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

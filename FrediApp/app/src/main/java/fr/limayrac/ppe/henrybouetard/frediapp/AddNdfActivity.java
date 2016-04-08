@@ -3,6 +3,7 @@ package fr.limayrac.ppe.henrybouetard.frediapp;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,8 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,10 +27,31 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddNdfActivity extends AppCompatActivity {
 
     private ProgressDialog progress;
+
+    Spinner lesMotifs;
+    EditText txtTrajet;
+    EditText txtKm;
+    EditText txtCoutP;
+    EditText txtCoutH;
+    EditText txtCoutR;
+
+    // JSON Node names
+    private static final String TAG_LOGIN_STATUS = "status";
+    private static final String TAG_LOGIN_MESSAGE = "message";
+    private static final String TAG_MOTIF_ID = "idMotif";
+    private static final String TAG_MOTIF_LIBELLE = "libelle";
+
+    private SharedPreferences preferencesSettings;
+    private SharedPreferences.Editor preferencesEditor;
+
+    private static final int PREFERENCES_MODE_PRIVATE = 0;
+    public static final String PREFS_NAME = "MyPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,24 +59,57 @@ public class AddNdfActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_ndf);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        lesMotifs = (Spinner) findViewById(R.id.spMotif);
+        txtTrajet = (EditText) findViewById(R.id.txtTrajetNdf);
+        txtKm = (EditText) findViewById(R.id.txtDistanceNdf);
+        txtCoutP = (EditText) findViewById(R.id.txtCoutP);
+        txtCoutH = (EditText) findViewById(R.id.txtCoutH);
+        txtCoutR = (EditText) findViewById(R.id.txtCoutR);
+
+        new PostRequestListMotifs(this).execute();
     }
 
-    public void addButtonPressed(View v) {
-        Intent gestionNdf = new Intent(this, GestionNdfActivity.class);
-        startActivity(gestionNdf);
+    public void nextButtonPressed(View v) {
+
+        int id = Integer.parseInt(lesMotifs.getSelectedItem().toString().split(":")[0]);
+        String libelle = lesMotifs.getSelectedItem().toString().split(":")[1];
+
+        String trajetNdf = txtTrajet.getText().toString();
+        int distanceNdf = Integer.parseInt(txtKm.getText().toString());
+        float coupP = Float.parseFloat(txtCoutP.getText().toString());
+        float coutH = Float.parseFloat(txtCoutH.getText().toString());
+        float coutR = Float.parseFloat(txtCoutR.getText().toString());
+
+        preferencesSettings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        preferencesEditor = preferencesSettings.edit();
+
+        preferencesEditor.putString("trajetNdf",trajetNdf);
+        preferencesEditor.putInt("distanceNdf", distanceNdf);
+        preferencesEditor.putFloat("coutPNdf", coupP);
+        preferencesEditor.putFloat("coutHNdf", coutH);
+        preferencesEditor.putFloat("coutRNdf", coutR);
+        preferencesEditor.putInt("idMotif", id);
+
+        preferencesEditor.commit();
+
+        Intent addDateNdf = new Intent(this, AddNdfDateActivity.class);
+        startActivity(addDateNdf);
     }
 
-    private class PostRequest extends AsyncTask<String, Void, Void> {
+    private class PostRequestListMotifs extends AsyncTask<String, Void, Void> {
 
         private final Context context;
+        private List<Motif> listMotifs = new ArrayList<Motif>();
 
-        public PostRequest(Context c) {
-            this.context = c;
+        public PostRequestListMotifs(Context context) {
+            this.context = context;
         }
 
+        @Override
         protected void onPreExecute() {
             progress = new ProgressDialog(this.context);
-            progress.setMessage("Loading");
+            progress.setMessage("Loading...");
             progress.show();
         }
 
@@ -58,13 +117,8 @@ public class AddNdfActivity extends AppCompatActivity {
         protected Void doInBackground(String... params) {
 
             try {
-
-                //final TextView outputView = (TextView) findViewById(R.id.txtOutput);
-
-                // URL myUrl = new URL("williamhenry.ddns.net/frediApp/actions/login.php");
-                URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/retrieveLigue.php");
-
-
+                // TODO add URL parameter
+                URL myUrl = new URL("http://williamhenry.ddns.net/frediApp/actions/retrieveMotif.php");
                 HttpURLConnection con = (HttpURLConnection) myUrl.openConnection();
                 String urlParameters = "";
                 con.setRequestMethod("POST");
@@ -77,61 +131,78 @@ public class AddNdfActivity extends AppCompatActivity {
                 dStream.flush();
                 dStream.close();
 
-                int responseCode = con.getResponseCode();
-
-                System.out.println("\nSending 'POST' request to URL : " + myUrl);
-                System.out.println("Post parameters : " + urlParameters);
-                System.out.println("Response Code : " + responseCode);
-
                 final StringBuilder output = new StringBuilder();
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                 String line = "";
                 StringBuilder responseOutput = new StringBuilder();
 
-                while ((line = br.readLine()) != null) {
+                while((line = br.readLine()) != null ) {
                     responseOutput.append(line);
                 }
                 br.close();
 
-                AddNdfActivity.this.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        //outputView.setText(output);
-                        System.out.println(output);
-                        progress.dismiss();
-                    }
-                });
-
+                this.listMotifs = parseJSON(responseOutput.toString());
+                
             } catch (MalformedURLException e) {
-                // TODO Generate Exception
                 e.printStackTrace();
             } catch (IOException e) {
-                // TODO Generate Exception
                 e.printStackTrace();
             }
+
+            AddNdfActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    List<String> str = new ArrayList<String>();
+                    for(Motif mot : listMotifs) {
+                        String st = mot.getId() + ":" + mot.getMotif();
+                        str.add(st);
+                    }
+
+                    ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(AddNdfActivity.this, android.R.layout.simple_list_item_1, str);
+
+                    dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    AddNdfActivity.this.lesMotifs.setAdapter(dataAdapter);
+
+
+                    progress.dismiss();
+                }
+            });
 
             return null;
         }
 
-        private String[] parseLoginJSON(String json) {
+        @Override
+        protected void onPostExecute(Void aVoid) {
 
-            JSONObject jsonObj = null;
-            String[] returnValue = null;
+        }
+
+        public List<Motif> parseJSON(String json) {
+            JSONObject jsonObject = null;
+            List<Motif> listMotifs = new ArrayList<Motif>();
 
             if (json != null) {
                 try {
-                    jsonObj = new JSONObject(json);
+                    jsonObject = new JSONObject(json);
+                    String status = jsonObject.getString(TAG_LOGIN_STATUS);
+                    JSONArray motifs = jsonObject.getJSONArray(TAG_LOGIN_MESSAGE);
+
+                    for (int i = 0; i < motifs.length(); i++) {
+                        JSONObject motif = motifs.getJSONObject(i);
+                        int idMotif = motif.getInt(TAG_MOTIF_ID);
+                        String libelle = motif.getString(TAG_MOTIF_LIBELLE);
+                        Motif unMotif = new Motif(libelle, idMotif);
+                        listMotifs.add(unMotif);
+                    }
+
                 } catch (JSONException exc) {
                     exc.getMessage();
-                    return null;
                 }
-            } else {
-                return null;
             }
 
-            return null;
+            return listMotifs;
         }
+
+
     }
 }

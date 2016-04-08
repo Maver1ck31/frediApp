@@ -44,7 +44,8 @@ public class GestionNdfActivity extends AppCompatActivity {
     };
 
     ArrayList <NoteDeFrais> notesFrais = new ArrayList<NoteDeFrais>();
-    ArrayList<String> ndfTraj;
+    ArrayList <String> listTraj = new ArrayList<>();
+    String[] ndfTraj;
 
     private ProgressDialog progress;
 
@@ -91,11 +92,23 @@ public class GestionNdfActivity extends AppCompatActivity {
 
         for (NoteDeFrais note: notesFrais) {
             String motif = note.getTrajet();
-            ndfTraj.add(motif);
+            listTraj.add(motif);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ndfTraj);
-        listNdf.setAdapter(adapter);
+        if (notesFrais.size() > 0) {
+
+            ndfTraj = new String[notesFrais.size()];
+            for (int i = 0; i < notesFrais.size(); i++) {
+                NoteDeFrais aNdf = notesFrais.get(i);
+                String motif = aNdf.getTrajet();
+                ndfTraj[i] = motif;
+            }
+
+            System.out.println("ndfTraj: " + ndfTraj.length);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, ndfTraj);
+            listNdf.setAdapter(adapter);
+        }
 
     }
 

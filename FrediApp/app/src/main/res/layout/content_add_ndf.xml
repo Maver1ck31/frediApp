@@ -11,131 +11,93 @@
     tools:context="fr.limayrac.ppe.henrybouetard.frediapp.AddNdfActivity">
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/inputDate"
-        android:layout_weight="1"
-        android:inputType="date"
-        android:hint="test"
-        android:layout_alignParentEnd="true"
+        android:id="@+id/txtTrajetNdf"
+        android:hint="@string/trajetNdf"
+        android:layout_below="@+id/addNdf"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp"
         android:layout_alignParentRight="true"
-        android:layout_gravity="center" />
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnAddNdf"
+        android:id="@+id/addNdf"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textColor="#2f4f4f"
+        android:textSize="36dp" />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/inputMotif"
-        android:inputType="text"
-        android:layout_weight="1"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputDate"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputTrajet"
-        android:inputType="text"
-        android:layout_weight="1"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputMotif"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputNbkm"
         android:inputType="number"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputTrajet"
+        android:ems="10"
+        android:id="@+id/txtDistanceNdf"
+        android:layout_below="@+id/txtTrajetNdf"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignRight="@+id/txtTrajetNdf"
+        android:layout_alignEnd="@+id/txtTrajetNdf"
+        android:hint="@string/kmNdf" />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/inputCttrajet"
-        android:inputType="number"
-        android:layout_weight="1"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputNbkm"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/txtCoutP"
+        android:layout_below="@+id/txtDistanceNdf"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignRight="@+id/txtDistanceNdf"
+        android:layout_alignEnd="@+id/txtDistanceNdf"
+        android:hint="@string/coutpNdf" />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/inputCtpeage"
-        android:inputType="number"
-        android:layout_weight="1"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputCttrajet"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/txtCoutR"
+        android:layout_below="@+id/txtCoutP"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignRight="@+id/txtCoutP"
+        android:layout_alignEnd="@+id/txtCoutP"
+        android:hint="@string/coupRNdf" />
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/inputCtheberg"
-        android:layout_weight="1"
-        android:inputType="number"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputCtpeage"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/txtCoutH"
+        android:layout_below="@+id/txtCoutR"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputCtrepas"
-        android:layout_weight="1"
-        android:inputType="number"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputCtheberg"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/inputCttotal"
-        android:layout_weight="1"
-        android:inputType="number"
-        android:hint="test"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputCtrepas"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignRight="@+id/txtCoutP"
+        android:layout_alignEnd="@+id/txtCoutP"
+        android:hint="@string/coutHndf" />
 
     <Spinner
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listLigues"
-        android:spinnerMode="dropdown"
-        android:layout_gravity="center"
-        android:layout_below="@+id/inputCttotal"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"/>
+        android:id="@+id/spMotif"
+        android:layout_below="@+id/txtCoutH"
+        android:layout_centerHorizontal="true" />
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add"
-        android:id="@+id/valid"
-        android:layout_marginLeft="135dp"
-        android:layout_marginRight="100dp"
-        android:layout_gravity="center"
-        android:layout_below="@+id/listLigues"
+        android:text="Next"
+        android:id="@+id/btnAddNdf"
+        android:layout_below="@+id/spMotif"
         android:layout_centerHorizontal="true"
-        android:onClick="addButtonPressed" />
+        android:onClick="nextButtonPressed" />
 
 </RelativeLayout>

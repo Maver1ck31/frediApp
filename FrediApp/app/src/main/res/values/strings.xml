@@ -22,4 +22,15 @@
     <string name="pass2h">Password confirmation</string>
     <string name="su">Register</string>
     <string name="title_activity_gestion_ndf">GestionNdfActivity</string>
+    <string name="dateNdf">Date</string>
+    <string name="trajetNdf">Trajet</string>
+    <string name="kmNdf">Distance (km)</string>
+    <string name="coutpNdf">Coût du péage</string>
+    <string name="coutHndf">Coût de l\'hebergement</string>
+    <string name="coupRNdf">Coût des Repas</string>
+    <string name="idMotifNdf">Motif</string>
+    <string name="idDemandeurNdf">Demandeur</string>
+    <string name="idAnneeNdf">Annee</string>
+    <string name="btnAddNdf">Add</string>
+    <string name="title_activity_add_ndf_date">AddNdfDateActivity</string>
 </resources>
