@@ -10,24 +10,32 @@
     tools:showIn="@layout/activity_gestion_ndf"
     tools:context="fr.limayrac.ppe.henrybouetard.frediapp.GestionNdfActivity">
 
-    <ListView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listNdf"
-        android:headerDividersEnabled="false"
+        android:text="@string/txtBtnLogout"
+        android:id="@+id/btnLogout"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="93dp" />
+        android:onClick="logoutBtnPressed" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ajouter une note de frais"
-        android:id="@+id/addNdf"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="43dp"
+        android:text="@string/txtBtnAddNdf"
+        android:id="@+id/btnAddNdf"
+        android:layout_alignTop="@+id/btnLogout"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:onClick="addButtonPressed" />
 
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listNdf"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/btnLogout" />
 </RelativeLayout>

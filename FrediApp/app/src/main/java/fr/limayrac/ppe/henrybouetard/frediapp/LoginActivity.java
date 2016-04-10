@@ -143,6 +143,7 @@ public class LoginActivity extends AppCompatActivity {
                             preferencesEditor = preferencesSettings.edit();
 
                             preferencesEditor.putInt("idDem", finalId);
+                            preferencesEditor.putBoolean("isUserLoggedIn", true);
                             preferencesEditor.commit();
 
                         } else {
@@ -215,6 +216,14 @@ public class LoginActivity extends AppCompatActivity {
         // Initialising object by using their id's
         userMail = (EditText)findViewById(R.id.txtMail);
         userPasswd = (EditText)findViewById(R.id.txtPassword);
+
+        preferencesSettings = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Boolean loggedIn = preferencesSettings.getBoolean("isUserLoggedIn", false);
+
+        if (loggedIn) {
+            Intent goGestNdf = new Intent(this, GestionNdfActivity.class);
+            startActivity(goGestNdf);
+        }
     }
 
     @Override

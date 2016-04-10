@@ -33,4 +33,6 @@
     <string name="idAnneeNdf">Annee</string>
     <string name="btnAddNdf">Add</string>
     <string name="title_activity_add_ndf_date">AddNdfDateActivity</string>
+    <string name="txtBtnLogout">LogOut</string>
+    <string name="txtBtnAddNdf">Add Ndf</string>
 </resources>
