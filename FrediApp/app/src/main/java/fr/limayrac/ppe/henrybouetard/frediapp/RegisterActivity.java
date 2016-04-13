@@ -162,6 +162,7 @@ import java.net.URL;
                                     // TODO intent Login
                                     Intent loginView = new Intent(RegisterActivity.this, LoginActivity.class);
                                     startActivity(loginView);
+                                    finish();
                                 }
                             });
 

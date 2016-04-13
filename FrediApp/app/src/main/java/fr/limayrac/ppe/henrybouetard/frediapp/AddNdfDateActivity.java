@@ -164,6 +164,7 @@ public class AddNdfDateActivity extends AppCompatActivity {
                                     dialog.dismiss();
                                     Intent gestNdf = new Intent(context, GestionNdfActivity.class);
                                     startActivity(gestNdf);
+                                    finish();
                                 }
                             });
 

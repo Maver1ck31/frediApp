@@ -136,6 +136,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (finalStatus.contains("success")) {
                             Intent gestionNdf = new Intent(LoginActivity.this, GestionNdfActivity.class);
                             startActivity(gestionNdf);
+                            finish();
 
                             System.out.println("finalId: " + finalId);
 
@@ -223,6 +224,7 @@ public class LoginActivity extends AppCompatActivity {
         if (loggedIn) {
             Intent goGestNdf = new Intent(this, GestionNdfActivity.class);
             startActivity(goGestNdf);
+            finish();
         }
     }
 

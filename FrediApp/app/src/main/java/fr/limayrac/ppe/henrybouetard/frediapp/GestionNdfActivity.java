@@ -90,6 +90,7 @@ public class GestionNdfActivity extends AppCompatActivity {
     public void logoutBtnPressed(View v) {
         Intent backLogin = new Intent(this, LoginActivity.class);
         startActivity(backLogin);
+        finish();
 
         preferencesEditor = preferencesSettings.edit();
         preferencesEditor.putBoolean("isUserLoggedIn", false);
